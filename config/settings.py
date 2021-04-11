@@ -31,6 +31,8 @@ ALLOWED_HOSTS = []
 
 # Application definition
 
+THIRD_PARTY_APPS = []
+
 DJANGO_APPS = [
     'django.contrib.admin',
     'django.contrib.auth',
