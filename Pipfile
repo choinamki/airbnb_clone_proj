@@ -4,9 +4,9 @@ verify_ssl = true
 name = "pypi"
 
 [packages]
-django = "==2.2.5"
 pillow = "*"
 django-countries = "*"
+django = "*"
 
 [dev-packages]
 
