@@ -84,11 +84,12 @@ class Room(core_models.TimeStampedModel):
 
     def save(self, *args, **kwargs):
         self.city = str.capitalize(self.city)
-        super.save(self, *args, **kwargs)
+        super().save(*args, **kwargs)
 
     def total_rating(self):
         all_reviews = self.reviews.all()
         all_ratings = int()
+
         if not all_reviews:
             return 0
         else:
