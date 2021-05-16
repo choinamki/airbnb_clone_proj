@@ -1,7 +1,13 @@
 from django.shortcuts import render
-from django.http import HttpResponse
-# Create your views here.
+from . import models
 
 
 def all_rooms(request):
-    return HttpResponse(content='<h1>hello</h1>')
+    page = int(request.GET.get('page', 1))
+    page_size = 10
+    limit = page_size * page
+    offset = limit - page_size
+    print(offset)
+    print(limit)
+    all_rooms = models.Room.objects.all()[offset:limit]
+    return render(request, 'rooms/home.html', {'rooms': all_rooms})
