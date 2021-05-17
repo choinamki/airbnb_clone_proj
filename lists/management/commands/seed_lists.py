@@ -31,4 +31,4 @@ class Command(BaseCommand):
             lists_model = list_models.List.objects.get(pk=pk)
             to_add = rooms[random.randint(0, 5): random.randint(6, 30)]
             lists_model.rooms.add(*to_add)
-        self.stdout.write(self.style.SUCCESS(f'{number}lists created!'))
+        self.stdout.write(self.style.SUCCESS(f'{number} lists created!'))
