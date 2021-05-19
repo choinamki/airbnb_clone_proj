@@ -25,9 +25,9 @@ with open(f'{BASE_DIR}/config/key.json', 'r') as json_file:
 SECRET_KEY = json_data['key']
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = '*'
 
 # Application definition
 
