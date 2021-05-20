@@ -39,11 +39,16 @@ def search(request):
     bedrooms = int(request.GET.get('bedrooms', 0))
     beds = int(request.GET.get('beds', 0))
     baths = int(request.GET.get('baths', 0))
+    instant = request.GET.get('instant', False)
+    super_host = request.GET.get('super_host', False)
 
+    s_amenities = request.GET.getlist('amenities')
+    s_facilities = request.GET.getlist('facilities')
 
     form = {'city': city, 's_room_type': room_type, 's_country': country,
-            'price': price, 'guest': guest, 'bedrooms': bedrooms, 'beds': beds, 'baths': baths,}
+            'price': price, 'guest': guest, 'bedrooms': bedrooms, 'beds': beds, 'baths': baths,
+            's_amenities': s_amenities, 's_facilities': s_facilities, 'instant': instant, 'super_host': super_host}
 
-    choice = {'countries': countries, 'room_types': room_types, 'amenities': amenities, 'facilities': facilities,}
+    choice = {'countries': countries, 'room_types': room_types, 'amenities': amenities, 'facilities': facilities}
 
     return render(request, 'rooms/search.html', {**form, **choice})

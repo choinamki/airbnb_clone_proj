@@ -34,8 +34,8 @@
             </select>
         </div>
         <div>
-            <label for="price">City</label>
-            <input type="number" id="price" name="price" placeholder="Price"/>
+            <label for="price">Price</label>
+            <input value="{{ price }}" type="number" id="price" name="price" placeholder="Price"/>
         </div>
         <div>
             <label for="guest">Guest</label>
@@ -50,8 +50,16 @@
             <input value="{{ beds }}" type="number" id="beds" name="beds" placeholder="Beds"/>
         </div>
         <div>
-            <label for="baths">Bath</label>
-            <input value="{{ bath }}" type="number" id="baths" name="baths" placeholder="Baths"/>
+            <label for="baths">Baths</label>
+            <input value="{{ baths }}" type="number" id="baths" name="baths" placeholder="Baths"/>
+        </div>
+        <div>
+            <label for="instant">Instant Book Only?</label>
+            <input type="checkbox" id="instant" name="instant" {% if instant %}checked{% endif %}/>
+        </div>
+        <div>
+            <label for="super_host">By Super Host Only?</label>
+            <input type="checkbox" id="super_host" name="super_host" {% if super_host %}checked{% endif %}/>
         </div>
         <div>
             <h3>Amenities</h3>
@@ -59,7 +67,10 @@
                 {% for amenity in amenities %}
                     <li>
                     <label>{{ amenity.name }}</label>
-                    <input value="{{ amenity.pk }}" id="a_{{ amenity.pk }}" name="amenities" type="checkbox" />
+                    <input value="{{ amenity.pk }}" id="a_{{ amenity.pk }}"
+                           name="amenities" type="checkbox"
+                    {% if amenity.pk|slugify in s_amenities %}checked{% endif %}
+                    />
                     </li>
 
                 {% endfor %}
@@ -71,7 +82,10 @@
                 {% for facility in facilities %}
                     <li>
                     <label>{{ facility.name }}</label>
-                    <input value="{{ facility.pk }}" id="a_{{ facility.pk }}" name="facilities" type="checkbox" />
+                    <input value="{{ facility.pk }}" id="a_{{ facility.pk }}"
+                           name="facilities" type="checkbox"
+                    {% if facility.pk|slugify in s_facilities %}checked{% endif %}
+                    />
                     </li>
 
                 {% endfor %}
