@@ -1,5 +1,6 @@
 from django.utils import timezone
 from django.views.generic import ListView, DetailView, View
+from django.core.paginator import Paginator
 from django.shortcuts import render
 from . import models, forms
 
@@ -82,7 +83,10 @@ class SerachView(View):
                 for facility in facilities:
                     filter_args['facilities'] = facility
 
-                rooms = models.Room.objects.filter(**filter_args)
+                qs = models.Room.objects.filter(**filter_args).orederby('-created')
+                paginator = Paginator(qs, 10, orphans=5)
+                page = request.Get.get('page', 1)
+                rooms = paginator.get_page(page)
                 return render(request, 'rooms/search.html', {'form': form, 'rooms': rooms})
         else:
             form = forms.SearchForm()
