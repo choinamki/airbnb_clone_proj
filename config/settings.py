@@ -135,3 +135,15 @@ AUTH_USER_MODEL = 'users.User'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'uploads')
 
 MEDIA_URL = '/media/'
+
+
+# Email configuration
+
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_HOST_USER = json_data['email_id']
+EMAIL_HOST_PASSWORD = json_data['email_password']
+EMAIL_PORT = 587
+EMAIL_USE_TLS = True
+EMAIL_FROM = 'myemail@gmail.com'
+
