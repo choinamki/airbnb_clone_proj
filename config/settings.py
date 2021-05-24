@@ -20,6 +20,7 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 # See https://docs.djangoproject.com/en/2.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
+json_data = dict()
 with open(f'{BASE_DIR}/config/key.json', 'r') as json_file:
     json_data = json.load(json_file)
 SECRET_KEY = json_data['key']
@@ -147,3 +148,6 @@ EMAIL_PORT = 587
 EMAIL_USE_TLS = True
 EMAIL_FROM = 'myemail@gmail.com'
 
+# Github login configuration
+GH_ID = json_data['gh_id']
+GH_SECRET = json_data['gh_secret']

@@ -1,10 +1,10 @@
+import requests
 from django.views.generic import FormView
 from django.urls import reverse_lazy
 from django.shortcuts import redirect, reverse
 from django.conf import settings
 from django.contrib.auth import authenticate, login, logout
 
-import config.settings
 from . import forms, models
 
 
@@ -65,11 +65,18 @@ def complete_verification(request, key):
 
 
 def github_login(request):
-    client_id = settings.json_data['gh_id']
+    client_id = settings.GH_ID
     redirect_uri = 'http://127.0.0.1:8000/users/login/github/callback'
-    return redirect(f'https://github.com/login/oauth/authorize? \
-                    client_id={client_id}&redirect_uri={redirect_uri}&scope=read:user')
+    return redirect(f'https://github.com/login/oauth/authorize?'
+                    f'client_id={client_id}&redirect_uri={redirect_uri}&scope=read:user')
 
 
-def github_callback(reuqest):
-    pass
+def github_callback(request):
+    code = request.GET.get('code', None)
+    client_id = settings.GH_ID
+    client_secret = settings.GH_SECRET
+    if code is not None:
+        request = requests.post(f'https://github.com/login/oauth/access_token?'
+                                f'client_id={client_id}&client_secret={client_secret}&code={code}',
+                                headers={'Accept': 'application/json'})
+    return redirect(reverse('core:home'))
