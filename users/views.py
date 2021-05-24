@@ -72,4 +72,4 @@ def github_login(request):
 
 
 def github_callback(reuqest):
-    oass
+    pass
