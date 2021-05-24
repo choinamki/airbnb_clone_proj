@@ -1,8 +1,10 @@
-from django.views import View
 from django.views.generic import FormView
 from django.urls import reverse_lazy
-from django.shortcuts import render, redirect, reverse
+from django.shortcuts import redirect, reverse
+from django.conf import settings
 from django.contrib.auth import authenticate, login, logout
+
+import config.settings
 from . import forms, models
 
 
@@ -60,3 +62,14 @@ def complete_verification(request, key):
         # to do : add error message
         pass
     return redirect(reverse('core:home'))
+
+
+def github_login(request):
+    client_id = settings.json_data['gh_id']
+    redirect_uri = 'http://127.0.0.1:8000/users/login/github/callback'
+    return redirect(f'https://github.com/login/oauth/authorize? \
+                    client_id={client_id}&redirect_uri={redirect_uri}&scope=read:user')
+
+
+def github_callback(reuqest):
+    oass

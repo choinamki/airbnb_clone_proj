@@ -8,6 +8,8 @@
 {% endblock search-bar %}
 
 {% block content %}
+    {% include 'partials/socail_login.html' %}
+
     <form method="post" action="{% url "users:login" %}">
         {% csrf_token %}
         {{ form.as_p }}
