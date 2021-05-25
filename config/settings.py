@@ -151,3 +151,6 @@ EMAIL_FROM = 'myemail@gmail.com'
 # Github login configuration
 GH_ID = json_data['gh_id']
 GH_SECRET = json_data['gh_secret']
+
+# Kakao login configuration
+KAKAO_API_KEY = json_data['kakao_key']
