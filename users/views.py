@@ -4,7 +4,7 @@ from django.urls import reverse_lazy
 from django.shortcuts import redirect, reverse
 from django.conf import settings
 from django.contrib.auth import authenticate, login, logout
-
+from django.core.files.base import ContentFile
 from . import forms, models
 
 
@@ -121,10 +121,10 @@ def github_callback(request):
 
 
 def kakao_login(request):
-    REST_API_KEY = settings.KAKAO_API_KEY
-    REDIRECT_URI = 'http://127.0.0.1:8000/users/login/kakao/callback'
+    rest_api_key = settings.KAKAO_API_KEY
+    redirect_uri = 'http://127.0.0.1:8000/users/login/kakao/callback'
     return redirect(f'https://kauth.kakao.com/oauth/authorize?'
-                    f'client_id={REST_API_KEY}&redirect_uri={REDIRECT_URI}&response_type=code')
+                    f'client_id={rest_api_key}&redirect_uri={redirect_uri}&response_type=code')
 
 
 class KakaoException(Exception):
@@ -133,10 +133,43 @@ class KakaoException(Exception):
 
 def kakao_callback(request):
     try:
-        REST_API_KEY = settings.KAKAO_API_KEY
-        REDIRECT_URI = 'http://127.0.0.1:8000/users/login/kakao/callback'
+        rest_api_key = settings.KAKAO_API_KEY
+        redirect_uri = 'http://127.0.0.1:8000/users/login/kakao/callback'
         code = request.GET.get('code')
         token_request = requests.get( f'https://kauth.kakao.com/oauth/token?grant_type=authorization_code&'
-                                      f'client_id={REST_API_KEY}&redirect_uri={REDIRECT_URI}&code={code}')
+                                      f'client_id={rest_api_key}&redirect_uri={redirect_uri}&code={code}')
+        token_json = token_request.json()
+        error = token_json.get('error', None)
+        if error is not None:
+            raise KakaoException()
+        access_token = token_json.get('access_token')
+        profile_request = requests.get('https://kapi.kakao.com/v2/user/me',
+                                       headers={"Authorization": f"Bearer {access_token}"})
+        profile_json = profile_request.json()
+        email = profile_json.get("kakao_account").get("email")
+        if email is None:
+            raise KakaoException()
+        properties = profile_json.get("properties")
+        nickname = properties.get("nickname")
+        profile_image = properties.get("profile_image")
+        try:
+            user = models.User.objects.get(email=email)
+            if user.login_method != models.User.LOGIN_KAKAO:
+                raise KakaoException()
+        except models.User.DoesNotExist:
+            user = models.User.objects.create(
+                email=email,
+                username=email,
+                first_name=nickname,
+                login_method=models.User.LOGIN_KAKAO,
+                email_verified=True,
+            )
+            user.set_unusable_password()
+            user.save()
+            if profile_image is not None:
+                photo_request = request.get(profile_image)
+                user.avatar.save(f'{nickname}-avatar', content=photo_request.content)
+        login(request, user)
+        return redirect(reverse("core:home"))
     except KakaoException:
         return redirect(reverse('users:login'))
