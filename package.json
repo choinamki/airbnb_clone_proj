@@ -1,0 +1,25 @@
+{
+  "name": "airbnb_clone",
+  "version": "1.0.0",
+  "description": "에어비엔비 클론코딩 연습 프로젝트입니다.",
+  "main": "index.js",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/choinamki/airbnb_clone_proj.git"
+  },
+  "scripts": {
+    "css": "gulp"
+  },
+  "homepage": "https://github.com/choinamki/airbnb_clone_proj#readme",
+  "dependencies": {
+    "gulp": "^4.0.2",
+    "gulp-csso": "^4.0.1",
+    "gulp-postcss": "^9.0.0",
+    "gulp-sass": "^4.1.0",
+    "node-sass": "^6.0.0"
+  },
+  "devDependencies": {
+    "autoprefixer": "^10.2.5",
+    "tailwindcss": "^2.1.2"
+  }
+}

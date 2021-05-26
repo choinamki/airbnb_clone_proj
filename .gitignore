@@ -185,3 +185,6 @@ key.json
 
 # resoure
 uploads/
+
+# node module
+node_modules/
