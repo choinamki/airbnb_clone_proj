@@ -87,9 +87,6 @@ class Room(core_models.TimeStampedModel):
         self.city = str.capitalize(self.city)
         super().save(*args, **kwargs)
 
-    def get_absolute_url(self):
-        return '/potato'
-
     def total_rating(self):
         all_reviews = self.reviews.all()
         all_ratings = int()
@@ -100,3 +97,7 @@ class Room(core_models.TimeStampedModel):
             for review in all_reviews:
                 all_ratings += review.rating_average()
             return round(all_ratings / len(all_reviews))
+
+    def first_photo(self):
+        photo,  = self.photos.all()[:1]
+        return photo.file.url

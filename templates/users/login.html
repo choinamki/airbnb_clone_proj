@@ -8,11 +8,14 @@
 {% endblock search-bar %}
 
 {% block content %}
-    {% include 'partials/socail_login.html' %}
 
-    <form method="post" action="{% url "users:login" %}">
-        {% csrf_token %}
-        {{ form.as_p }}
-        <button>Login</button>
-    </form>
+    <div class="container lg:w-5/12 md:w-1/2 mx-auto xl:w-1/4 my-10 flex flex-col items-center border p-6 border-gray-400">
+        {% include 'partials/socail_login.html' %}
+
+        <form method="post" action="{% url "users:login" %}">
+            {% csrf_token %}
+            {{ form.as_p }}
+            <button>Login</button>
+        </form>
+    </div>
 {% endblock content %}
