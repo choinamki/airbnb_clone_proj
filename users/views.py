@@ -1,5 +1,6 @@
 import requests
-from django.views.generic import FormView, DetailView
+from django.contrib.auth.views import PasswordChangeView
+from django.views.generic import FormView, DetailView, UpdateView
 from django.urls import reverse_lazy
 from django.shortcuts import redirect, reverse
 from django.conf import settings
@@ -182,3 +183,30 @@ class UserProfileView(DetailView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         return context
+
+
+class UpdateProfileView(UpdateView):
+    model = models.User
+    template_name = 'users/update-profile.html'
+    fields = ('first_name', 'last_name', 'gender', 'bio', 'birthdate', 'language', 'currency')
+
+    def get_object(self, queryset=None):
+        return self.request.user
+
+    def get_form(self, form_class=None):
+        form = super().get_form(form_class=form_class)
+        form.fields['birthdate'].widget.attrs = {'placeholder': 'Birthdate'}
+        form.fields['first_name'].widget.attrs = {'placeholder': 'first_name'}
+        form.fields['last_name'].widget.attrs = {'placeholder': 'last_name'}
+        return form
+
+
+class UpdatePasswordView(PasswordChangeView):
+    template_name = 'users/update-password.html'
+
+    def get_form(self, form_class=None):
+        form = super().get_form(form_class=form_class)
+        form.fields['old_password'].widget.attrs = {'placeholder': 'Current Password'}
+        form.fields['new_password1'].widget.attrs = {'placeholder': 'News Password'}
+        form.fields['new_password2'].widget.attrs = {'placeholder': 'Confirm new Password'}
+        return form
