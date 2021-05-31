@@ -2,10 +2,11 @@ from django.utils import timezone
 from django.http import Http404
 from django.views.generic import ListView, DetailView, View, UpdateView, FormView
 from django.core.paginator import Paginator
-from django.contrib import messages
-from django.shortcuts import render, redirect, reverse
 from django.contrib.messages.views import SuccessMessageMixin
+from django.shortcuts import redirect, reverse
+from django.shortcuts import render
 from django.contrib.auth.decorators import login_required
+from django.contrib import messages
 from users import mixins as user_mixins
 from . import models, forms
 
@@ -130,7 +131,7 @@ def delete_photo(request, room_pk, photo_pk):
     try:
         room = models.Room.objects.get(pk=room_pk)
         if room.host.pk != user.pk:
-            messages.error(request, "Cant delete that photo")
+            messages.error(request, 'Can not delete that photo')
         else:
             models.Photo.objects.filter(pk=photo_pk).delete()
             messages.success(request, "Photo Deleted")
@@ -163,4 +164,17 @@ class AddPhotoView(user_mixins.LoggedInOnlyView, FormView):
         pk = self.kwargs.get("pk")
         form.save(pk)
         messages.success(self.request, "Photo Uploaded")
-        return redirect(reverse("rooms:photos", kwargs={"pk": pk}))
+        return redirect(reverse("rooms:photos", kwargs={'pk': pk}))
+
+
+class CreateRoomView(user_mixins.LoggedInOnlyView, FormView):
+    form_class = forms.CreateRoomForm
+    template_name = 'rooms/room_create.html'
+
+    def form_valid(self, form):
+        room = form.save()
+        room.host = self.request.user
+        room.save()
+        form.save_m2m()
+        messages.success(self.request, "Room Created")
+        return redirect(reverse("rooms:detail", kwargs={'pk': room.pk}))

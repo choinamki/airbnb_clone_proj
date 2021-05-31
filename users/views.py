@@ -7,6 +7,7 @@ from django.shortcuts import redirect, reverse
 from django.conf import settings
 from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout
+from django.contrib.auth.decorators import login_required
 from . import forms, models
 from users.mixins import LoggedOutOnlyView, LoggedInOnlyView, EmailLoginOnlyView
 
@@ -222,3 +223,12 @@ class UpdatePasswordView(LoggedInOnlyView, SuccessMessageMixin, PasswordChangeVi
 
     def get_success_url(self):
         return self.request.user.get_absolute_url()
+
+
+@login_required
+def switch_hosting(request):
+    try:
+        del request.session['is_hosting']
+    except KeyError:
+        request.session['is_hosting'] = True
+    return redirect('core:home')
