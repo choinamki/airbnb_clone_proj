@@ -156,3 +156,6 @@ GH_SECRET = json_data['gh_secret']
 
 # Kakao login configuration
 KAKAO_API_KEY = json_data['kakao_key']
+
+# Auth config
+LOGIN_URL = '/users/login/'
