@@ -34,7 +34,7 @@ class Calendar(calendar.Calendar):
                 if month == self.month:
                     if day <= today:
                         past = True
-                new_day = Day(day, day < today)
+                new_day = Day(day, past)
                 days.append(new_day)
         return days
 
