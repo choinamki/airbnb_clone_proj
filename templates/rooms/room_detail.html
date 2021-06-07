@@ -94,6 +94,7 @@
                 {% if not reuqest.sesstion.is_hosting %}
                     {% for calendar in room.get_calendars %}
                         <div class="mb-20">
+                            <a class="btn-link block mb-10 w-2/6" href="{% url 'lists:save-room' room.pk %}"> Save to Favourites</a>
                             <span class="text-center font-medium text-lg block mb-8">{{ calendar.get_month }} / {{ calendar.year }}</span>
                             <div class="cal-grid mb-4">
                                 {% for day in calendar.day_names %}
