@@ -1,5 +1,5 @@
 {% extends "base.html" %}
-{% load is_booked %}
+{% load is_booked on_favs %}
 
 {% block page_title %}
     {{ room.name }}
@@ -15,7 +15,6 @@
             {% endfor %}
         </div>
     </div>
-
     <div class="container mx-auto flex justify-around pb-56">
         <div class="w-1/2">
             <div class="flex justify-between">
@@ -88,13 +87,18 @@
             </div>
         </div>
         <div class="w-1/3">
+            {% on_favs room as on_favs_boolean %}
+                {% if on_favs_boolean %}
+                    <a class="btn-link mb-10 w-2/6 bg-blue-400" href="{% url 'lists:toggle-room' room.pk %}?action=remove"> Delete to Favourites</a>
+                {% else %}
+                    <a class="btn-link mb-10 w-2/6 bg-red-500" href="{% url 'lists:toggle-room' room.pk %}?action=add"> Save to Favourites</a>
+                {% endif %}
             {% if room.host == user %}
                 <a href="{% url 'rooms:edit' room.pk %}" class="btn-link block">Edit Room</a>
             {% else%}
                 {% if not reuqest.sesstion.is_hosting %}
                     {% for calendar in room.get_calendars %}
                         <div class="mb-20">
-                            <a class="btn-link block mb-10 w-2/6" href="{% url 'lists:save-room' room.pk %}"> Save to Favourites</a>
                             <span class="text-center font-medium text-lg block mb-8">{{ calendar.get_month }} / {{ calendar.year }}</span>
                             <div class="cal-grid mb-4">
                                 {% for day in calendar.day_names %}
